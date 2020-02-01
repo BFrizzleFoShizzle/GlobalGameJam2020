@@ -18,14 +18,26 @@ public class Robot : MonoBehaviour
 	private Controller controller;
 	// prolly in order of key binding (if each weapon is controlled separately)
 	private List<Weapon> weapons = new List<Weapon>();
+
+	private float health;
+
     // Start is called before the first frame update
     void Start()
     {
-        foreach(MountPoint mount in mountPoints)
+		health = 100.0f;
+
+		foreach (MountPoint mount in mountPoints)
 		{
-			mount.part.AddToRobot(this);
-			if (mount.part is Weapon)
-				weapons.Add(mount.part as Weapon);
+			if(mount.part != null)
+			{
+				mount.part.transform.SetParent(mount.point);
+				mount.part.transform.localRotation = Quaternion.identity;
+				mount.part.transform.localPosition = Vector3.zero;
+				mount.part.transform.localScale = Vector3.one;
+				mount.part.AddToRobot(this);
+				if (mount.part is Weapon)
+					weapons.Add(mount.part as Weapon);
+			}
 		}
 
 		Debug.Log(Input.GetJoystickNames());
@@ -45,7 +57,8 @@ public class Robot : MonoBehaviour
 
 		if (movement.magnitude > 0)
 		{
-			transform.rotation = Quaternion.FromToRotation(new Vector3(0, 0, 1), movement);
+			//transform.rotation = Quaternion.FromToRotation(new Vector3(0, 0, 1), movement);
+			transform.rotation = Quaternion.LookRotation(movement, new Vector3(0, 1, 0));
 		}
 
 		Rigidbody rigidbody = GetComponent<Rigidbody>();
@@ -58,5 +71,44 @@ public class Robot : MonoBehaviour
 				weapon.Attack();
 			}
 		}
+	}
+
+	public void AddPartToRandomPoint(Part part)
+	{
+		List<MountPoint> unusedMounts = new List<MountPoint>();
+
+		foreach(MountPoint mountPoint in mountPoints)
+		{
+			if (mountPoint.part == null)
+			{
+				unusedMounts.Add(mountPoint);
+			}
+		}
+
+		// add to robot if there's a free mount
+		if (unusedMounts.Count > 0)
+		{
+			int mountIndex = UnityEngine.Random.Range(0, unusedMounts.Count);
+			unusedMounts[mountIndex].part = part;
+			part.AddToRobot(this);
+			// add to weapons list if needed
+			if (part is Weapon)
+				weapons.Add(part as Weapon);
+		}
+	}
+
+	public void AddHealth(float health)
+	{
+		this.health += health;
+	}
+
+	public void SetController(Controller controller)
+	{
+		this.controller = controller;
+	}
+
+	public bool IsAlive()
+	{
+		return health > 0.0f;
 	}
 }
