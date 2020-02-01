@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 	const float speed = 10.0f;
+	const float damage = 15.0f;
 	// robot we came from, ignore collisions with self
 	public Robot robot;
     // Start is called before the first frame update
@@ -23,5 +24,21 @@ public class Projectile : MonoBehaviour
 	public void FireFrom(Robot r)
 	{
 		robot = r;
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		Robot otherRobot = other.GetComponentInParent<Robot>();
+		if (otherRobot != null && otherRobot != robot)
+		{
+			// hit player, do damage + destroy projectile?
+			otherRobot.TakeDamage(damage);
+			Destroy(gameObject);
+		}
+		else if(other.GetComponent<Wall>() != null)
+		{
+			// hit wall, destroy projectile
+			Destroy(gameObject);
+		}
 	}
 }

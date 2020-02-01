@@ -145,6 +145,13 @@ public class Robot : MonoBehaviour
 		return legsPart;
 	}
 
+	public void TakeDamage(float damage)
+	{
+		health -= damage;
+		if (!IsAlive())
+			Debug.Log("DEAD");
+	}
+
 	private void SetupMount(MountPoint mount)
 	{
 		mount.part.transform.SetParent(mount.point);
