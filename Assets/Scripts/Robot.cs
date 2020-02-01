@@ -60,22 +60,25 @@ public class Robot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		Vector3 movement = controller.GetMovementDirection();
-
-		if (movement.magnitude > 0)
+		if (IsAlive())
 		{
-			//transform.rotation = Quaternion.FromToRotation(new Vector3(0, 0, 1), movement);
-			transform.rotation = Quaternion.LookRotation(movement, new Vector3(0, 1, 0));
-		}
+			Vector3 movement = controller.GetMovementDirection();
 
-		Rigidbody rigidbody = GetComponent<Rigidbody>();
-		rigidbody.velocity = movement * Speed * GetSpeed();
-
-		if (controller.IsAttacking())
-		{
-			foreach(Weapon weapon in weapons)
+			if (movement.magnitude > 0)
 			{
-				weapon.Attack();
+				//transform.rotation = Quaternion.FromToRotation(new Vector3(0, 0, 1), movement);
+				transform.rotation = Quaternion.LookRotation(movement, new Vector3(0, 1, 0));
+			}
+
+			Rigidbody rigidbody = GetComponent<Rigidbody>();
+			rigidbody.velocity = movement * Speed * GetSpeed();
+
+			if (controller.IsAttacking())
+			{
+				foreach (Weapon weapon in weapons)
+				{
+					weapon.Attack();
+				}
 			}
 		}
 	}
