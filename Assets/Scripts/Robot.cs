@@ -25,15 +25,17 @@ public class Robot : MonoBehaviour
 	public MountPoint legs;
 	public GameObject body;
 
-	private float health;
+	private float health = 0.0f;
+	private float maxHealth = 0.0f;
 
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
     {
 		Debug.Assert(legs != null);
 		Debug.Assert(body != null);
 
-		health = 100.0f;
+		// base health
+		AddHealth(100.0f);
 
 		if (legs.part != null)
 			SetupMount(legs);
@@ -112,6 +114,7 @@ public class Robot : MonoBehaviour
 
 	public void AddHealth(float health)
 	{
+		maxHealth += health;
 		this.health += health;
 	}
 
@@ -148,6 +151,7 @@ public class Robot : MonoBehaviour
 	public void TakeDamage(float damage)
 	{
 		health -= damage;
+		health = Mathf.Max(0.0f, health);
 		if (!IsAlive())
 			Debug.Log("DEAD");
 	}
@@ -161,5 +165,15 @@ public class Robot : MonoBehaviour
 		mount.part.AddToRobot(this);
 		if (mount.part is Weapon)
 			weapons.Add(mount.part as Weapon);
+	}
+
+	public float GetHealth()
+	{
+		return health;
+	}
+
+	public float GetMaxHealth()
+	{
+		return maxHealth;
 	}
 }

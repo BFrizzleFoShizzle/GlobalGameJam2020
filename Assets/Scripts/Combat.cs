@@ -15,9 +15,15 @@ public class Combat : MonoBehaviour
 	// test code
 	public List<GameObject> debugPartPrefabs;
 
+	public GameObject HUDPanel;
+	public GameObject playerCombatPanelPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
+		Debug.Log(HUDPanel != null);
+		Debug.Log(playerCombatPanelPrefab != null);
+
 		players = new List<Robot>();
 
 		Debug.Log(Gamepad.all.Count);
@@ -33,6 +39,10 @@ public class Combat : MonoBehaviour
 				robot.SetController(new GamepadController(gamepad));
 				robot.transform.position = playerSpawns[players.Count].position;
 				players.Add(robot);
+
+				GameObject newPanelObj = Instantiate(playerCombatPanelPrefab, HUDPanel.transform);
+				PlayerCombatPanel newPanel = newPanelObj.GetComponent<PlayerCombatPanel>();
+				newPanel.SetPlayer("Player " + players.Count, robot);
 			}
 		}
 
