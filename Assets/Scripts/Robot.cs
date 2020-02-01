@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+using UnityEngine.InputSystem.XInput;
 
 public class Robot : MonoBehaviour
 {
@@ -39,15 +42,32 @@ public class Robot : MonoBehaviour
 					weapons.Add(mount.part as Weapon);
 			}
 		}
+		/*
+		foreach (DualShockGamepad ds in DualShockGamepad.all)
+		{
+			Debug.Log(ds);
+			Debug.Log(ds.enabled);
+			Debug.Log(ds.lastUpdateTime);
+		}
 
-		Debug.Log(Input.GetJoystickNames());
+		if (DualShockGamepad.current != null)
+			controller = new DSController();
+			*/
 
-		if(Input.GetJoystickNames().Length > 0)
+
+		//Debug.Log(Gamepad.current.added);
+		//Debug.Log(Gamepad.current.added);
+
+		//if (controller == null && XInputController.current != null)
+		//	controller = new XboxController();
+
+		if (controller == null && Gamepad.current != null)
 			controller = new GamepadController();
 
 		if (controller == null)
 			controller = new KeyboardController();
 
+		Debug.Log(controller);
 	}
 
     // Update is called once per frame

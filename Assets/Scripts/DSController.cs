@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
 
-public class GamepadController : Controller
+public class DSController : Controller
 {
-	public GamepadController()
+	public DSController()
 	{
-		Debug.Log("Gamepad controller created");
+		Debug.Log("DualShock controller created");
 	}
 
 	public Vector3 GetFacingDirection()
@@ -17,7 +17,7 @@ public class GamepadController : Controller
 
 	public Vector3 GetMovementDirection()
 	{
-		Vector2 stick = Gamepad.current.leftStick.ReadValue();
+		Vector2 stick = DualShockGamepad.current.leftStick.ReadValue();
 
 		Debug.Log(stick);
 
@@ -34,6 +34,6 @@ public class GamepadController : Controller
 
 	public bool IsAttacking()
 	{
-		return Gamepad.current.buttonSouth.isPressed;
+		return DualShockGamepad.current.xButton.isPressed;
 	}
 }

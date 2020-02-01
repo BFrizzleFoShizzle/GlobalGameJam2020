@@ -1,15 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XInput;
 
-public class GamepadController : Controller
+public class XboxController : Controller
 {
-	public GamepadController()
+	public XboxController()
 	{
-		Debug.Log("Gamepad controller created");
+		Debug.Log("Created XboxController");
 	}
-
 	public Vector3 GetFacingDirection()
 	{
 		return GetMovementDirection().normalized;
@@ -17,7 +16,7 @@ public class GamepadController : Controller
 
 	public Vector3 GetMovementDirection()
 	{
-		Vector2 stick = Gamepad.current.leftStick.ReadValue();
+		Vector2 stick = XInputController.current.leftStick.ReadValue();
 
 		Debug.Log(stick);
 
@@ -34,6 +33,6 @@ public class GamepadController : Controller
 
 	public bool IsAttacking()
 	{
-		return Gamepad.current.buttonSouth.isPressed;
+		return XInputController.current.aButton.isPressed;
 	}
 }
