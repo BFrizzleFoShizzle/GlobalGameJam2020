@@ -42,25 +42,7 @@ public class Robot : MonoBehaviour
 					weapons.Add(mount.part as Weapon);
 			}
 		}
-		/*
-		foreach (DualShockGamepad ds in DualShockGamepad.all)
-		{
-			Debug.Log(ds);
-			Debug.Log(ds.enabled);
-			Debug.Log(ds.lastUpdateTime);
-		}
-
-		if (DualShockGamepad.current != null)
-			controller = new DSController();
-			*/
-
-
-		//Debug.Log(Gamepad.current.added);
-		//Debug.Log(Gamepad.current.added);
-
-		//if (controller == null && XInputController.current != null)
-		//	controller = new XboxController();
-
+		
 		if (controller == null && Gamepad.current != null)
 			controller = new GamepadController();
 
