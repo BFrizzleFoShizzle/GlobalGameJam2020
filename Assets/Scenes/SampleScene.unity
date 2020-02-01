@@ -457,6 +457,16 @@ PrefabInstance:
       propertyPath: mountPoints.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1788350926738580117, guid: 76f09d59c79eabd41a9ccbd56aeb9f73,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 1788350926738580117, guid: 76f09d59c79eabd41a9ccbd56aeb9f73,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1788350926738580122, guid: 76f09d59c79eabd41a9ccbd56aeb9f73,
         type: 3}
       propertyPath: m_Name

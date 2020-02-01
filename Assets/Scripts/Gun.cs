@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class Gun : Weapon
 {
+	const float MaxReloadTime = 0.5f;
 	public GameObject projectileInstance;
 	// point in space new projectiles are created at
 	public Transform muzzle;
-    // Start is called before the first frame update
-    void Start()
+
+	private float reloadTime;
+
+	// Start is called before the first frame update
+	void Start()
     {
 		Debug.Assert(projectileInstance != null);
     }
@@ -16,17 +20,30 @@ public class Gun : Weapon
     // Update is called once per frame
     void Update()
     {
-        
+        if(reloadTime > 0.0f)
+		{
+			reloadTime -= Time.deltaTime;
+		}
     }
 
 	override public void Attack()
 	{
-		GameObject projObj = Instantiate(projectileInstance);
-		projectileInstance.transform.position = muzzle.position;
-		projectileInstance.transform.rotation = robot.transform.rotation;
+		if (CanFire())
+		{
+			GameObject projObj = Instantiate(projectileInstance);
+			projObj.transform.position = muzzle.position;
+			projObj.transform.rotation = robot.transform.rotation;
 
-		Projectile projectile = projectileInstance.GetComponent<Projectile>();
-		Debug.Assert(projectile != null);
-		projectile.FireFrom(robot);
+			Projectile projectile = projObj.GetComponent<Projectile>();
+			Debug.Assert(projectile != null);
+			projectile.FireFrom(robot);
+
+			reloadTime = MaxReloadTime;
+		}
+	}
+
+	private bool CanFire()
+	{
+		return reloadTime <= 0.0f;
 	}
 }
