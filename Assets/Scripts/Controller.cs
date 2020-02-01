@@ -11,4 +11,5 @@ public interface Controller
 
 	// TODO multiple weapons?
 	bool IsAttacking();
+	bool IsDoingPickUp();
 }

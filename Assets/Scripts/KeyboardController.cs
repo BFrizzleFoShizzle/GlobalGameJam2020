@@ -36,4 +36,9 @@ public class KeyboardController : Controller
 	{
 		return Keyboard.current.spaceKey.isPressed;
 	}
+
+	public bool IsDoingPickUp()
+	{
+		return Keyboard.current.spaceKey.wasPressedThisFrame;
+	}
 }

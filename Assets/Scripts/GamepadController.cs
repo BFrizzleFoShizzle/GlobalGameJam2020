@@ -38,4 +38,9 @@ public class GamepadController : Controller
 	{
 		return gamepad.buttonSouth.isPressed;
 	}
+
+	public bool IsDoingPickUp()
+	{
+		return gamepad.buttonSouth.wasPressedThisFrame;
+	}
 }
