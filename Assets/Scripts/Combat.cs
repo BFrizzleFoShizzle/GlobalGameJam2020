@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Combat : MonoBehaviour
 {
@@ -16,14 +17,28 @@ public class Combat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+		players = new List<Robot>();
+
+		Debug.Log(Gamepad.all.Count);
+
+		foreach (Gamepad gamepad in Gamepad.all)
+		{
+			if (gamepad.enabled)
+			{
+				GameObject robotObj = Instantiate(robotPrefab);
+
+				Robot robot = robotObj.GetComponent<Robot>();
+				robot.SetController(new GamepadController(gamepad));
+				Debug.Assert(robot != null);
+				players.Add(robot);
+			}
+		}
+
 		GenerateRandomRobots();
 
-		for (int i=0;i<playerParts.Count; ++i)
+		for (int i=0;i<players.Count; ++i)
 		{
-			GameObject robotObj = Instantiate(robotPrefab);
-
-			Robot robot = robotObj.GetComponent<Robot>();
-			Debug.Assert(robot != null);
+			Robot robot = players[i];
 
 			foreach (Part part in playerParts[i])
 			{
@@ -42,16 +57,18 @@ public class Combat : MonoBehaviour
 	private void GenerateRandomRobots()
 	{
 		playerParts = new List<List<Part>>();
-		playerParts.Add(new List<Part>());
-
-		for(int i=0; i<2; ++i)
+		for(int i=0;i<players.Count;++i)
 		{
-			int partIdx = Random.Range(0, debugPartPrefabs.Count);
-			GameObject partObj = Instantiate(debugPartPrefabs[partIdx]);
-			Part part = partObj.GetComponent<Part>();
-			Debug.Assert(part != null);
-			playerParts[0].Add(part);
-		}
+			playerParts.Add(new List<Part>());
 
+			for (int j = 0; j < 2; ++j)
+			{
+				int partIdx = Random.Range(0, debugPartPrefabs.Count);
+				GameObject partObj = Instantiate(debugPartPrefabs[partIdx]);
+				Part part = partObj.GetComponent<Part>();
+				Debug.Assert(part != null);
+				playerParts[i].Add(part);
+			}
+		}
 	}
 }

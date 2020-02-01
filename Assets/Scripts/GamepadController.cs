@@ -5,9 +5,13 @@ using UnityEngine.InputSystem;
 
 public class GamepadController : Controller
 {
-	public GamepadController()
+	private Gamepad gamepad;
+	public GamepadController(Gamepad gamepad = null)
 	{
+		if (gamepad == null)
+			gamepad = Gamepad.current;
 		Debug.Log("Gamepad controller created");
+		this.gamepad = gamepad;
 	}
 
 	public Vector3 GetFacingDirection()
@@ -17,9 +21,7 @@ public class GamepadController : Controller
 
 	public Vector3 GetMovementDirection()
 	{
-		Vector2 stick = Gamepad.current.leftStick.ReadValue();
-
-		Debug.Log(stick);
+		Vector2 stick = gamepad.leftStick.ReadValue();
 
 		// Magnitude is usually not larger than 1, but sometimes is?
 		Vector3 movement = new Vector3(stick.x, 0, stick.y);
@@ -34,6 +36,6 @@ public class GamepadController : Controller
 
 	public bool IsAttacking()
 	{
-		return Gamepad.current.buttonSouth.isPressed;
+		return gamepad.buttonSouth.isPressed;
 	}
 }
