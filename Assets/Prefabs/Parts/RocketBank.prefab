@@ -120,7 +120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f4c7c3126da5540993680a90f55d4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileInstance: {fileID: 5407057528728996018, guid: a8945d155698b5a4aba4a50c2462a48e,
+  MaxReloadTime: 0.5
+  projectileInstance: {fileID: 5401064958348991644, guid: f3008792b4c3f3940aeb232b4204fcde,
     type: 3}
   muzzle: {fileID: 2510146821664291831}
 --- !u!1001 &6206601014178084090
