@@ -73,7 +73,7 @@ public class Combat : MonoBehaviour
 		{
 			playerParts.Add(new List<Part>());
 
-			for (int j = 0; j < 2; ++j)
+			for (int j = 0; j < 3; ++j)
 			{
 				int partIdx = Random.Range(0, debugPartPrefabs.Count);
 				GameObject partObj = Instantiate(debugPartPrefabs[partIdx]);

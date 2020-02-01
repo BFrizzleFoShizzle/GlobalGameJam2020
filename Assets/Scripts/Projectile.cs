@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-	const float speed = 10.0f;
-	const float damage = 15.0f;
+	public float speed = 10.0f;
+	public float damage = 15.0f;
 	// robot we came from, ignore collisions with self
 	public Robot robot;
     // Start is called before the first frame update

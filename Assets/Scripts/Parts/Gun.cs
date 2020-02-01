@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gun : Weapon
 {
-	const float MaxReloadTime = 0.5f;
+	public float MaxReloadTime = 0.5f;
 	public GameObject projectileInstance;
 	// point in space new projectiles are created at
 	public Transform muzzle;

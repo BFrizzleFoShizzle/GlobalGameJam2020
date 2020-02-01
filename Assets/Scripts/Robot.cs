@@ -8,7 +8,7 @@ using UnityEngine.InputSystem.XInput;
 
 public class Robot : MonoBehaviour
 {
-	private const float Speed = 3.0f;
+	private const float Speed = 6.0f;
 
 	[Serializable]
 	public class MountPoint
