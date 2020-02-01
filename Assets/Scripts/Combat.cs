@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Combat : MonoBehaviour
 {
+	public List<Transform> playerSpawns;
 	public GameObject robotPrefab;
 	// TODO how does this get set?
 	private List<List<Part>> playerParts;
@@ -28,8 +29,9 @@ public class Combat : MonoBehaviour
 				GameObject robotObj = Instantiate(robotPrefab);
 
 				Robot robot = robotObj.GetComponent<Robot>();
-				robot.SetController(new GamepadController(gamepad));
 				Debug.Assert(robot != null);
+				robot.SetController(new GamepadController(gamepad));
+				robot.transform.position = playerSpawns[players.Count].position;
 				players.Add(robot);
 			}
 		}
