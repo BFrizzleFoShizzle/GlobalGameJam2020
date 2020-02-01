@@ -15,6 +15,7 @@ public class Robot : MonoBehaviour
 	}
 
 	public List<MountPoint> mountPoints;
+	private Controller controller;
 	// prolly in order of key binding (if each weapon is controlled separately)
 	private List<Weapon> weapons = new List<Weapon>();
     // Start is called before the first frame update
@@ -26,33 +27,36 @@ public class Robot : MonoBehaviour
 			if (mount.part is Weapon)
 				weapons.Add(mount.part as Weapon);
 		}
-    }
+
+		Debug.Log(Input.GetJoystickNames());
+
+		if(Input.GetJoystickNames().Length > 0)
+			controller = new GamepadController();
+
+		if (controller == null)
+			controller = new KeyboardController();
+
+	}
 
     // Update is called once per frame
     void Update()
     {
-		Vector3 movement = new Vector3(0, 0, 0);
-        if(Input.GetKey(KeyCode.W))
-			movement += new Vector3(0, 0, 1);
-		else if (Input.GetKey(KeyCode.S))
-			movement += new Vector3(0, 0, -1);
+		Vector3 movement = controller.GetMovementDirection();
 
-		if (Input.GetKey(KeyCode.A))
-			movement += new Vector3(-1, 0, 0);
-		else if (Input.GetKey(KeyCode.D))
-			movement += new Vector3(1, 0, 0);
+		if (movement.magnitude > 0)
+		{
+			transform.rotation = Quaternion.FromToRotation(new Vector3(0, 0, 1), movement);
+		}
 
-		if(Input.GetKey(KeyCode.Space))
+		Rigidbody rigidbody = GetComponent<Rigidbody>();
+		rigidbody.velocity = movement * Speed;
+
+		if (controller.IsAttacking())
 		{
 			foreach(Weapon weapon in weapons)
 			{
 				weapon.Attack();
 			}
 		}
-
-		Rigidbody rigidbody = GetComponent<Rigidbody>();
-
-		rigidbody.velocity = movement.normalized * Speed;
-		rigidbody.rotation = Quaternion.FromToRotation(new Vector3(0,0,1), movement);
 	}
 }
