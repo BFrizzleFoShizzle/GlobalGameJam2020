@@ -64,7 +64,7 @@ public class ScavengerRobot : MonoBehaviour
 			{
 				if (inPartDrop)
 				{
-					part.gameObject.SetActive(false);
+					part.transform.parent.gameObject.SetActive(false);
 					collectedParts.Add(part);
 				}
 				else
