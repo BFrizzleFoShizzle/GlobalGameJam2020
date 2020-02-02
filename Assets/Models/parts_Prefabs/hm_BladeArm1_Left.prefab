@@ -167,7 +167,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5528072139964209474}
-  - component: {fileID: 3986816445693142642}
   - component: {fileID: 8913956767644150486}
   - component: {fileID: 7064650753231236857}
   m_Layer: 0
@@ -191,18 +190,6 @@ Transform:
   m_Father: {fileID: 281815553877370534}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3986816445693142642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2749118023048216552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3a39cbfaa8310146b52a653c6f42098, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!33 &8913956767644150486
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -260,7 +247,7 @@ GameObject:
   m_Component:
   - component: {fileID: 281815553877370534}
   m_Layer: 0
-  m_Name: hm_BladeArm1_Left
+  m_Name: hm_BladeArm1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

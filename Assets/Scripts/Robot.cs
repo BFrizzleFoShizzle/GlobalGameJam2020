@@ -28,14 +28,17 @@ public class Robot : MonoBehaviour
 	private float health = 0.0f;
 	private float maxHealth = 0.0f;
 
+	public Robot()
+	{
+		// base health
+		AddHealth(100.0f);
+	}
+
 	// Start is called before the first frame update
 	void Start()
     {
 		Debug.Assert(legs != null);
 		Debug.Assert(body != null);
-
-		// base health
-		AddHealth(100.0f);
 
 		if (legs.part != null)
 			SetupMount(legs);

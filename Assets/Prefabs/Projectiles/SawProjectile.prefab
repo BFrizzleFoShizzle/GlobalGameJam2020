@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
-  damage: 1
+  damage: 2
   robot: {fileID: 0}
 --- !u!33 &4623334100374399668
 MeshFilter:

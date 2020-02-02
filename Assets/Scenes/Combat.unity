@@ -807,8 +807,9 @@ MonoBehaviour:
   - {fileID: 1337032827}
   - {fileID: 48710115}
   - {fileID: 1415764768}
-  robotPrefab: {fileID: 6017234328912181207, guid: 0c08c1d3213834748b5df9559a745ccb,
-    type: 3}
+  robotPrefabs:
+  - {fileID: 6212966008756466474, guid: 09b564aaadc4d654094a53a167a0bd84, type: 3}
+  - {fileID: 473793024894260989, guid: 8119f323d4c80ce42957cf713776f517, type: 3}
   debugPartPrefabs:
   - {fileID: 6443509896435335267, guid: 39e52a76b43adc94aa71add6d62ca5aa, type: 3}
   - {fileID: 4859829316121678933, guid: 25fab8cde6ff4c54492208e77ce1fb0a, type: 3}
@@ -817,7 +818,7 @@ MonoBehaviour:
   - {fileID: 1634096981645231975, guid: 4c696ab92d5a47b4eb994e296e626fd0, type: 3}
   - {fileID: 6213890956384380474, guid: 2cae6d2ee2a676543b9287dc76d3d987, type: 3}
   HUDPanel: {fileID: 1941768714}
-  playerCombatPanelPrefab: {fileID: 1174019635093537219, guid: a9168a2a851d7e84aad4417da5611afe,
+  playerCombatPanelPrefab: {fileID: 5791909960149590653, guid: b40c58c19fa9e7a4da3d27f99ab85da6,
     type: 3}
 --- !u!4 &913703822
 Transform:

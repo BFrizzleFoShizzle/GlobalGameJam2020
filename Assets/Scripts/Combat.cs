@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Combat : MonoBehaviour
 {
+	private static int winnerIdx = -1;
+
+	public static int GetWinner()
+	{
+		return winnerIdx;
+	}
+
 	public List<Transform> playerSpawns;
-	public GameObject robotPrefab;
+	public List<GameObject> robotPrefabs;
 	// TODO how does this get set?
 	private List<List<Part>> playerParts;
 
@@ -18,8 +26,11 @@ public class Combat : MonoBehaviour
 	public GameObject HUDPanel;
 	public GameObject playerCombatPanelPrefab;
 
-    // Start is called before the first frame update
-    void Start()
+	const string nextSceneName = "Scenes/GameOver";
+	AsyncOperation gameOverLoad;
+
+	// Start is called before the first frame update
+	void Start()
     {
 		Debug.Log(HUDPanel != null);
 		Debug.Log(playerCombatPanelPrefab != null);
@@ -28,11 +39,15 @@ public class Combat : MonoBehaviour
 
 		Debug.Log(Gamepad.all.Count);
 
+		gameOverLoad = SceneManager.LoadSceneAsync(nextSceneName);
+		gameOverLoad.allowSceneActivation = false;
+
 		foreach (Gamepad gamepad in Gamepad.all)
 		{
 			if (gamepad.enabled)
 			{
-				GameObject robotObj = Instantiate(robotPrefab);
+				int prefabIdx = Random.Range(0, robotPrefabs.Count);
+				GameObject robotObj = Instantiate(robotPrefabs[prefabIdx]); ;
 
 				Robot robot = robotObj.GetComponent<Robot>();
 				Debug.Assert(robot != null);
@@ -47,7 +62,7 @@ public class Combat : MonoBehaviour
 		}
 
 		//GenerateRandomRobots();
-
+		
 		playerParts = Scavenge.GetPlayerPartLists();
 
 		for (int i=0;i<players.Count; ++i)
@@ -65,8 +80,26 @@ public class Combat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
+		int alivePlayers = 0;
+
+		for (int i = 0; i < players.Count; ++i)
+			if (players[i].IsAlive())
+				++alivePlayers;
+
+		if (alivePlayers == 1)
+		{
+			// one player left, winner
+			for (int i = 0; i < players.Count; ++i)
+				if (players[i].IsAlive())
+					winnerIdx = i;
+
+			EndCombat();
+		}
+
+		// escape to go back to menu
+		if(Keyboard.current.escapeKey.isPressed)
+			EndCombat();
+	}
 
 	// test code
 	private void GenerateRandomRobots()
@@ -89,9 +122,12 @@ public class Combat : MonoBehaviour
 
 	private void EndCombat()
 	{
+		Debug.Log("COMBAT END");
 		// cleanup undestroyable parts
 		foreach (List<Part> parts in playerParts)
 			foreach (Part part in parts)
 				Destroy(part);
+
+		gameOverLoad.allowSceneActivation = true;
 	}
 }
