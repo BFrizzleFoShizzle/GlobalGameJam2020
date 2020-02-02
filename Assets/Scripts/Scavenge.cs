@@ -17,7 +17,8 @@ public class Scavenge : MonoBehaviour
 
 	public List<Transform> playerSpawns;
 	public List<Transform> playerDrops;
-	public GameObject scavengerPrefab;
+	//public GameObject scavengerPrefab;
+	public List<GameObject> scavengerPrefabs;
 	public GameObject pickupPartPrefab;
 	public GameObject partSpawn;
 	public Text timerText;
@@ -40,11 +41,11 @@ public class Scavenge : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		Debug.Assert(scavengerPrefab != null);
 		Debug.Assert(pickupPartPrefab != null);
 		Debug.Assert(partSpawn != null);
 		Debug.Assert(timerText != null);
 		Debug.Assert(playerSpawns.Count == playerDrops.Count);
+		Debug.Assert(scavengerPrefabs.Count == playerSpawns.Count);
 
 		players = new List<ScavengerRobot>();
 
@@ -125,7 +126,7 @@ public class Scavenge : MonoBehaviour
 
 	private void CreateRobotWithController(Controller controller)
 	{
-		GameObject robotObj = Instantiate(scavengerPrefab);
+		GameObject robotObj = Instantiate(scavengerPrefabs[players.Count]);
 
 		ScavengerRobot robot = robotObj.GetComponent<ScavengerRobot>();
 		Debug.Assert(robot != null);

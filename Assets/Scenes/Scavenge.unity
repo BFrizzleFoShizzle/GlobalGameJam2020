@@ -744,8 +744,11 @@ MonoBehaviour:
   - {fileID: 1641629424}
   - {fileID: 2032280213}
   - {fileID: 1377451777}
-  scavengerPrefab: {fileID: 7194910702794888268, guid: caaf8de9484804441abd76de400d2fec,
-    type: 3}
+  scavengerPrefabs:
+  - {fileID: 2370348669280585521, guid: d30d8bed7b30c774196ea91968c286e8, type: 3}
+  - {fileID: 4034554942801177812, guid: 7bdc8276d1ca3d04bb8bbc4150ab3bf5, type: 3}
+  - {fileID: 298174587518520672, guid: fa537ed007632994c80adaef359cec5a, type: 3}
+  - {fileID: 6110999267323167421, guid: c45f2863facd93c438a5ef4bcc86cf8b, type: 3}
   pickupPartPrefab: {fileID: 335903597010355883, guid: 53971364cab00fe4db01841952c6dcb4,
     type: 3}
   partSpawn: {fileID: 1597733386}
