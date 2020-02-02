@@ -4,7 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Scavenge.unity
+    guid: 30e69f9a5359ec946a7868cdd11c7607
+  - enabled: 1
+    path: Assets/Scenes/Combat.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: f663212c344c8a740b281f66fd561a9f,
       type: 2}

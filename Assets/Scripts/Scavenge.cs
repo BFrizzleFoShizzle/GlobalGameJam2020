@@ -2,13 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Scavenge : MonoBehaviour
 {
+	// used for passing state between scenes
+	private static List<List<Part>> staticPlayerPartList;
+
+	public static List<List<Part>> GetPlayerPartLists()
+	{
+		return staticPlayerPartList;
+	}
+
 	public List<Transform> playerSpawns;
+	public List<Transform> playerDrops;
 	public GameObject scavengerPrefab;
 	public GameObject pickupPartPrefab;
 	public GameObject partSpawn;
+	public Text timerText;
 	// parts lists
 	public List<GameObject> weaponPrefabList;
 	public List<GameObject> legsPrefabList;
@@ -17,13 +29,22 @@ public class Scavenge : MonoBehaviour
 	private List<List<Part>> playerParts;
 	private List<ScavengerRobot> players;
 
+	const float TotalScavengeTime = 20.0f;
+	private float scavengeTime;
+
+	const string nextSceneName = "Scenes/Combat";
+	AsyncOperation combatLoad;
+
+	private bool scavengingFinished = false;
+
 	// Start is called before the first frame update
 	void Start()
     {
 		Debug.Assert(scavengerPrefab != null);
 		Debug.Assert(pickupPartPrefab != null);
 		Debug.Assert(partSpawn != null);
-
+		Debug.Assert(timerText != null);
+		Debug.Assert(playerSpawns.Count == playerDrops.Count);
 
 		players = new List<ScavengerRobot>();
 
@@ -31,24 +52,47 @@ public class Scavenge : MonoBehaviour
 		{
 			if (gamepad.enabled)
 			{
-				GameObject robotObj = Instantiate(scavengerPrefab);
-
-				ScavengerRobot robot = robotObj.GetComponent<ScavengerRobot>();
-				Debug.Assert(robot != null);
-				robot.SetController(new GamepadController(gamepad));
-				robot.transform.position = playerSpawns[players.Count].position;
-				players.Add(robot);
+				CreateRobotWithController(new GamepadController(gamepad));
 			}
 		}
 
+		if(players.Count == 0)
+			CreateRobotWithController(new KeyboardController());
+
 		SpawnParts();
+
+		scavengeTime = TotalScavengeTime;
+
+		combatLoad = SceneManager.LoadSceneAsync(nextSceneName);
+		combatLoad.allowSceneActivation = false;
 	}
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
+		scavengeTime -= Time.deltaTime;
+
+		timerText.text = string.Format("{0:F1}", scavengeTime);
+
+		if (scavengeTime <= 0.0f && !scavengingFinished)
+		{
+			staticPlayerPartList = new List<List<Part>>();
+
+			foreach (ScavengerRobot robot in players)
+			{
+				staticPlayerPartList.Add(new List<Part>());
+				foreach (Part part in robot.GetCollectedParts())
+				{
+					part.transform.SetParent(null);
+					DontDestroyOnLoad(part.gameObject);
+					staticPlayerPartList[staticPlayerPartList.Count - 1].Add(part);
+
+				}
+			}
+			combatLoad.allowSceneActivation = true;
+			scavengingFinished = true;
+		}
+	}
 
 	private void SpawnParts()
 	{
@@ -77,5 +121,19 @@ public class Scavenge : MonoBehaviour
 		pickupPartObj.transform.position = spawnLoc;
 		partObj.transform.localScale *= 10.0f;
 		partObj.transform.localPosition = new Vector3(0, 0, 0);
+	}
+
+	private void CreateRobotWithController(Controller controller)
+	{
+		GameObject robotObj = Instantiate(scavengerPrefab);
+
+		ScavengerRobot robot = robotObj.GetComponent<ScavengerRobot>();
+		Debug.Assert(robot != null);
+		robot.SetController(controller);
+		robot.transform.position = playerSpawns[players.Count].position;
+		Collider partDropCollider = playerDrops[players.Count].GetComponent<Collider>();
+		Debug.Assert(partDropCollider != null);
+		robot.SetPartDrop(partDropCollider);
+		players.Add(robot);
 	}
 }

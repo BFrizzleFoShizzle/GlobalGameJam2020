@@ -14,11 +14,19 @@ public class ScavengerRobot : MonoBehaviour
 
 	private List<Part> pickableParts;
 
+	private Collider partDrop;
+
+	private bool inPartDrop = false;
+
+	// final part list
+	private List<Part> collectedParts;
+
     // Start is called before the first frame update
     void Start()
     {
 		pickableParts = new List<Part>();
-
+		collectedParts = new List<Part>();
+		Debug.Assert(partDrop != null);
 	}
 
     // Update is called once per frame
@@ -54,7 +62,15 @@ public class ScavengerRobot : MonoBehaviour
 
 			if (part != null)
 			{
-				part.transform.parent.gameObject.GetComponent<Rigidbody>().detectCollisions = true;
+				if (inPartDrop)
+				{
+					part.gameObject.SetActive(false);
+					collectedParts.Add(part);
+				}
+				else
+				{
+					part.transform.parent.gameObject.GetComponent<Rigidbody>().detectCollisions = true;
+				}
 				part = null;
 			}
 
@@ -78,15 +94,34 @@ public class ScavengerRobot : MonoBehaviour
 		this.controller = controller;
 	}
 
+	public void SetPartDrop(Collider drop)
+	{
+		partDrop = drop;
+	}
+
+	public List<Part> GetCollectedParts()
+	{
+		return collectedParts;
+	}
+
 	private void OnTriggerEnter(Collider other)
 	{
 		Part part = other.GetComponentInParent<Part>();
 
-		Debug.Log(part);
-
 		if (part != null)
 			pickableParts.Add(part);
+
+		// part drop
+		if (other == partDrop)
+		{
+			inPartDrop = true;
+			PartDrop dropPartDrop = partDrop.GetComponent<PartDrop>();
+			Debug.Assert(dropPartDrop != null);
+
+			dropPartDrop.PlayerEnter();
+		}
 	}
+
 	private void OnTriggerExit(Collider other)
 	{
 		Debug.Log(other);
@@ -94,5 +129,16 @@ public class ScavengerRobot : MonoBehaviour
 
 		if (part != null)
 			pickableParts.Remove(part);
+
+		// part drop
+		if (other == partDrop)
+		{
+			inPartDrop = false;
+
+			PartDrop dropPartDrop = partDrop.GetComponent<PartDrop>();
+			Debug.Assert(dropPartDrop != null);
+
+			dropPartDrop.PlayerExit();
+		}
 	}
 }

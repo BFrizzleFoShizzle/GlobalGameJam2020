@@ -46,7 +46,9 @@ public class Combat : MonoBehaviour
 			}
 		}
 
-		GenerateRandomRobots();
+		//GenerateRandomRobots();
+
+		playerParts = Scavenge.GetPlayerPartLists();
 
 		for (int i=0;i<players.Count; ++i)
 		{
@@ -54,6 +56,7 @@ public class Combat : MonoBehaviour
 
 			foreach (Part part in playerParts[i])
 			{
+				part.gameObject.SetActive(true);
 				robot.AddPartToRandomPoint(part);
 			}
 		}
@@ -82,5 +85,13 @@ public class Combat : MonoBehaviour
 				playerParts[i].Add(part);
 			}
 		}
+	}
+
+	private void EndCombat()
+	{
+		// cleanup undestroyable parts
+		foreach (List<Part> parts in playerParts)
+			foreach (Part part in parts)
+				Destroy(part);
 	}
 }
