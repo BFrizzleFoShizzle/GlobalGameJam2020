@@ -42,23 +42,20 @@ public class Combat : MonoBehaviour
 		gameOverLoad = SceneManager.LoadSceneAsync(nextSceneName);
 		gameOverLoad.allowSceneActivation = false;
 
-		foreach (Gamepad gamepad in Gamepad.all)
+		foreach (Controller controller in Scavenge.GetPlayerControllers())
 		{
-			if (gamepad.enabled)
-			{
 				int prefabIdx = Random.Range(0, robotPrefabs.Count);
 				GameObject robotObj = Instantiate(robotPrefabs[prefabIdx]); ;
 
 				Robot robot = robotObj.GetComponent<Robot>();
 				Debug.Assert(robot != null);
-				robot.SetController(new GamepadController(gamepad));
+				robot.SetController(controller);
 				robot.transform.position = playerSpawns[players.Count].position;
 				players.Add(robot);
 
 				GameObject newPanelObj = Instantiate(playerCombatPanelPrefab, HUDPanel.transform);
 				PlayerCombatPanel newPanel = newPanelObj.GetComponent<PlayerCombatPanel>();
 				newPanel.SetPlayer("Player " + players.Count, robot);
-			}
 		}
 
 		//GenerateRandomRobots();

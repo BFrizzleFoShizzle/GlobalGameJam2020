@@ -15,6 +15,14 @@ public class Scavenge : MonoBehaviour
 		return staticPlayerPartList;
 	}
 
+	private static List<Controller> playerControllers;
+
+	public static List<Controller> GetPlayerControllers()
+	{
+		return playerControllers;
+	}
+
+
 	public List<Transform> playerSpawns;
 	public List<Transform> playerDrops;
 	//public GameObject scavengerPrefab;
@@ -30,6 +38,8 @@ public class Scavenge : MonoBehaviour
 	private List<List<Part>> playerParts;
 	private List<ScavengerRobot> players;
 
+	private List<Controller> potentialControllers;
+
 	const float TotalScavengeTime = 20.0f;
 	private float scavengeTime;
 
@@ -38,39 +48,77 @@ public class Scavenge : MonoBehaviour
 
 	private bool scavengingFinished = false;
 
+	private float joinTime = 5.0f;
+	private bool hasStarted = false;
+
+	public GameObject joinImage;
+
 	// Start is called before the first frame update
 	void Start()
     {
 		Debug.Assert(pickupPartPrefab != null);
 		Debug.Assert(partSpawn != null);
 		Debug.Assert(timerText != null);
+		Debug.Assert(joinImage != null);
 		Debug.Assert(playerSpawns.Count == playerDrops.Count);
 		Debug.Assert(scavengerPrefabs.Count == playerSpawns.Count);
 
 		players = new List<ScavengerRobot>();
+		potentialControllers = new List<Controller>();
+		playerControllers = new List<Controller>();
 
 		foreach (Gamepad gamepad in Gamepad.all)
 		{
 			if (gamepad.enabled)
 			{
-				CreateRobotWithController(new GamepadController(gamepad));
+				potentialControllers.Add(new GamepadController(gamepad));
+				//CreateRobotWithController(new GamepadController(gamepad));
 			}
 		}
 
-		if(players.Count == 0)
-			CreateRobotWithController(new KeyboardController());
-
-		SpawnParts();
-
-		scavengeTime = TotalScavengeTime;
+		//if(players.Count == 0)
+		//	CreateRobotWithController(new KeyboardController());
+		potentialControllers.Add(new KeyboardController());
 
 		combatLoad = SceneManager.LoadSceneAsync(nextSceneName);
 		combatLoad.allowSceneActivation = false;
+
 	}
 
     // Update is called once per frame
     void Update()
     {
+		if(!hasStarted)
+		{
+			joinTime -= Time.deltaTime;
+			List<Controller> listCopy = new List<Controller>(potentialControllers);
+			foreach(Controller controller in listCopy)
+			{
+				if (controller.IsDoingPickUp())
+				{
+					CreateRobotWithController(controller);
+					potentialControllers.Remove(controller);
+					playerControllers.Add(controller);
+				}
+			}
+
+			if (joinTime <= 0.0f)
+			{
+				hasStarted = true;
+
+				SpawnParts();
+
+				scavengeTime = TotalScavengeTime;
+
+				foreach(ScavengerRobot robot in players)
+					robot.enabled = true;
+
+				joinImage.SetActive(false);
+			}
+
+			return;
+		}
+
 		scavengeTime -= Time.deltaTime;
 
 		timerText.text = string.Format("{0:F1}", scavengeTime);
@@ -129,6 +177,7 @@ public class Scavenge : MonoBehaviour
 		GameObject robotObj = Instantiate(scavengerPrefabs[players.Count]);
 
 		ScavengerRobot robot = robotObj.GetComponent<ScavengerRobot>();
+		robot.enabled = false;
 		Debug.Assert(robot != null);
 		robot.SetController(controller);
 		robot.transform.position = playerSpawns[players.Count].position;
