@@ -69,8 +69,10 @@ public class Scavenge : MonoBehaviour
 
 		foreach (Gamepad gamepad in Gamepad.all)
 		{
-			if (gamepad.enabled)
+			// HACK to get around wireless PS4 controller bugs
+			if (gamepad.enabled && gamepad.displayName != "Wireless Controller")
 			{
+				Debug.Log(gamepad.displayName);
 				potentialControllers.Add(new GamepadController(gamepad));
 				//CreateRobotWithController(new GamepadController(gamepad));
 			}
