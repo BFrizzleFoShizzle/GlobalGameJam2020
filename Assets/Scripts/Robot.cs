@@ -92,7 +92,6 @@ public class Robot : MonoBehaviour
 		if(part is Legs)
 		{
 			AddLegs(part as Legs);
-			part.AddToRobot(this);
 			return;
 		}
 
@@ -112,9 +111,14 @@ public class Robot : MonoBehaviour
 			int mountIndex = UnityEngine.Random.Range(0, unusedMounts.Count);
 			unusedMounts[mountIndex].part = part;
 			part.AddToRobot(this);
+			part.gameObject.SetActive(true);
 			// add to weapons list if needed
 			if (part is Weapon)
 				weapons.Add(part as Weapon);
+		}
+		else
+		{
+			part.gameObject.SetActive(false);
 		}
 	}
 
@@ -136,8 +140,17 @@ public class Robot : MonoBehaviour
 
 	public void AddLegs(Legs legs)
 	{
-		this.legs.part = legs;
-		body.transform.localPosition += new Vector3(0, legs.height, 0);
+		if (this.legs.part == null)
+		{
+			this.legs.part = legs;
+			body.transform.localPosition += new Vector3(0, legs.height, 0);
+			legs.gameObject.SetActive(true);
+			legs.AddToRobot(this);
+		}
+		else
+		{
+			legs.gameObject.SetActive(false);
+		}
 	}
 
 	public float GetSpeed()
@@ -159,7 +172,10 @@ public class Robot : MonoBehaviour
 		health -= damage;
 		health = Mathf.Max(0.0f, health);
 		if (!IsAlive())
+		{
 			Debug.Log("DEAD");
+			gameObject.SetActive(false);
+		}
 	}
 
 	private void SetupMount(MountPoint mount)

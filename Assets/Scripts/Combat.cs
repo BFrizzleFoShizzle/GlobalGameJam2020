@@ -68,7 +68,6 @@ public class Combat : MonoBehaviour
 
 			foreach (Part part in playerParts[i])
 			{
-				part.gameObject.SetActive(true);
 				robot.AddPartToRandomPoint(part);
 			}
 		}

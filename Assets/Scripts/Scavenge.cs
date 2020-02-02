@@ -92,7 +92,10 @@ public class Scavenge : MonoBehaviour
     {
 		if(!hasStarted)
 		{
-			joinTime -= Time.deltaTime;
+			// need at least 2 players
+			if (playerControllers.Count >= 2)
+				joinTime -= Time.deltaTime;
+
 			List<Controller> listCopy = new List<Controller>(potentialControllers);
 			foreach(Controller controller in listCopy)
 			{
